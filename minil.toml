@@ -1,0 +1,6 @@
+name = "App-cpan-zero"
+# badges = ["travis"]
+authority="cpan:SKAJI"
+
+module_maker="ModuleBuildTiny"
+

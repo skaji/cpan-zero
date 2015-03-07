@@ -1,0 +1,29 @@
+#!perl
+use strict;
+use warnings;
+use utf8;
+use App::cpan::zero;
+
+App::cpan::zero->new->parse_options(@ARGV)->doit;
+
+__END__
+
+=head1 NAME
+
+cpan-zero - cpanm or carton helper for dependencies on git repositories
+
+=head1 SYNOPSIS
+
+    $ cpan-zero cpanm -nq -Llocal --installdeps .
+    # or
+    $ capn-zero carton install
+
+    Options:
+    -h, --help   show this help
+    -d, --debug  turn on debug message
+
+=head1 AUTHOR
+
+Shoichi Kaji
+
+=cut
