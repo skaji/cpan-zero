@@ -12,7 +12,7 @@ use Pod::Usage 'pod2usage';
 
 our $VERSION = "0.01";
 
-sub new { bless {}, shift }
+sub new { bless { default_mirror => "http://www.cpan.org" }, shift }
 
 sub parse_options {
     my ($self, @argv) = @_;
@@ -29,6 +29,9 @@ sub parse_options {
             pod2usage;
         } elsif ($option =~ /^-d|--debug$/) {
             $self->{debug} = 1;
+        } elsif ($option =~ /^--default-mirror/) {
+            $option =~ s{/$}{};
+            $self->{default_mirror} = $option;
         } else {
             warn "Unexpected option $option\n";
             pod2usage(1);
@@ -47,7 +50,7 @@ sub doit {
     local $ENV{PERL_CPANM_OPT} = join " ", (
         "--cascade-search",
         "--mirror" => $mirror,
-        "--mirror" => "http://www.cpan.org",
+        "--mirror" => $self->{default_mirror},
     );
     system @{ $self->{argv} };
     $self->debug("NOTE: please remove local mirror $directory");
@@ -68,7 +71,11 @@ sub prepare_repository {
     for my $module (@module) {
         my $option = $cpanfile->options_for_module($module) || +{};
         if (my $git = $option->{git}) {
-            push @need_inject, { module => $module, git => $git };
+            $git = "$git\@$option->{ref}" if $option->{ref};
+            push @need_inject, { module => $module, from => $git };
+        } elsif (my $dist = $option->{dist}) {
+            # which dist support? read OrePAN2::Injector :-)
+            push @need_inject, { module => $module, from => $dist };
         }
     }
     return unless @need_inject;
@@ -76,8 +83,8 @@ sub prepare_repository {
     $self->debug("building local repository $directory");
     my $injector = OrePAN2::Injector->new(directory => $directory);
     for my $module (@need_inject) {
-        $self->debug("injecting $module->{module} from $module->{git}");
-        my $merged = capture_merged { $injector->inject($module->{git}) };
+        $self->debug("injecting $module->{module} from $module->{from}");
+        my $merged = capture_merged { $injector->inject($module->{from}) };
     }
     my $indexer = OrePAN2::Indexer->new(directory => $directory);
     $self->debug("indexing $directory");
@@ -91,12 +98,15 @@ __END__
 
 =head1 NAME
 
-App::cpan::zero - cpanm or carton helper for dependencies on git repositories
+App::cpan::zero - cpanm or carton helper for dependencies not in cpan
 
 =head1 SYNOPSIS
 
     $ cat cpanfile
-    requires 'Test::PackageName', git => 'git://github.com/shoichikaji/Test-PackageName.git@master';
+    requires 'Test::PackageName',
+        git => 'git://github.com/shoichikaji/Test-PackageName.git', ref => "master";
+    requires 'My::Module',
+        dist => 'http://darkpan.example.com/My-Module-0.01.tar.gz';
 
     $ cpan-zero cpanm -nq -Llocal --installdeps .
     # or
@@ -104,9 +114,9 @@ App::cpan::zero - cpanm or carton helper for dependencies on git repositories
 
 =head1 DESCRIPTION
 
-App::cpan::zero helps cpanm or carton when dependencies are on git repositories.
+App::cpan::zero helps cpanm or carton when dependencies are not in cpan.
 
-I'm looking forward to cpanm and carton's native git support!
+I'm looking forward to cpanm and carton's native dist/git support.
 
 =head1 HOW IT WORKS
 
@@ -121,6 +131,8 @@ I'm looking forward to cpanm and carton's native git support!
 =back
 
 =head1 SEE ALSO
+
+L<https://speakerdeck.com/miyagawa/whats-new-in-carton-and-cpanm-at-yapc-asia-2013>
 
 L<App::cpanminus>
 
