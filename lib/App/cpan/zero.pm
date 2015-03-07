@@ -106,6 +106,8 @@ App::cpan::zero - cpanm or carton helper for dependencies on git repositories
 
 App::cpan::zero helps cpanm or carton when dependencies are on git repositories.
 
+I'm looking forward to cpanm and carton's native git support!
+
 =head1 HOW IT WORKS
 
 =over 4
