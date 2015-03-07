@@ -120,9 +120,9 @@ App::cpan::zero helps cpanm or carton when dependencies are on git repositories.
 
 =head1 SEE ALSO
 
-L<cpanm>
+L<App::cpanminus>
 
-L<carton>
+L<Carton>
 
 L<OrePAN2>
 

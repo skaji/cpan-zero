@@ -23,9 +23,9 @@ App::cpan::zero helps cpanm or carton when dependencies are on git repositories.
 
 # SEE ALSO
 
-[cpanm](https://metacpan.org/pod/cpanm)
+[App::cpanminus](https://metacpan.org/pod/App::cpanminus)
 
-[carton](https://metacpan.org/pod/carton)
+[Carton](https://metacpan.org/pod/Carton)
 
 [OrePAN2](https://metacpan.org/pod/OrePAN2)
 
