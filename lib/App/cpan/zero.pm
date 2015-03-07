@@ -9,7 +9,6 @@ use File::Spec;
 use Module::CPANfile;
 use Capture::Tiny 'capture_merged';
 use Pod::Usage 'pod2usage';
-use constant DEBUG => $ENV{PERL_CPAN_ZERO_DEBUG};
 
 our $VERSION = "0.01";
 
@@ -113,9 +112,7 @@ App::cpan::zero helps cpanm or carton when dependencies are on git repositories.
 
 =item * find dependencies which are on git repositories in C<cpanfile>
 
-=item * inject them to local mirror by L<OrePAN2::Injector>.
-
-=item * make local index by L<OrePAN2::Indexer>
+=item * inject them to local mirror and make index by L<OrePAN2>
 
 =item * execute cpanm or carton with C<--mirror local-mirror>
 
