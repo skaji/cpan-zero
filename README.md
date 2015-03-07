@@ -21,6 +21,16 @@ App::cpan::zero helps cpanm or carton when dependencies are on git repositories.
 - inject them to local mirror and make index by [OrePAN2](https://metacpan.org/pod/OrePAN2)
 - execute cpanm or carton with `--mirror local-mirror`
 
+# SEE ALSO
+
+[cpanm](https://metacpan.org/pod/cpanm)
+
+[carton](https://metacpan.org/pod/carton)
+
+[OrePAN2](https://metacpan.org/pod/OrePAN2)
+
+[cpanfile](https://metacpan.org/pod/cpanfile)
+
 # LICENSE
 
 Copyright (C) Shoichi Kaji.

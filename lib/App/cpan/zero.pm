@@ -118,6 +118,16 @@ App::cpan::zero helps cpanm or carton when dependencies are on git repositories.
 
 =back
 
+=head1 SEE ALSO
+
+L<cpanm>
+
+L<carton>
+
+L<OrePAN2>
+
+L<cpanfile>
+
 =head1 LICENSE
 
 Copyright (C) Shoichi Kaji.
