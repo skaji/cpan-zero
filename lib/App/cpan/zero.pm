@@ -9,6 +9,7 @@ use File::Spec;
 use Module::CPANfile;
 use Capture::Tiny 'capture_merged';
 use Pod::Usage 'pod2usage';
+require Getopt::Long;
 
 our $VERSION = "0.01";
 
@@ -16,28 +17,16 @@ sub new { bless { default_mirror => "http://www.cpan.org" }, shift }
 
 sub parse_options {
     my ($self, @argv) = @_;
-    my @option;
-    while (my $try = shift @argv) {
-        if ($try =~ /^-/) {
-            push @option, $try;
-        } else {
-            unshift @argv, $try and last;
-        }
-    }
-    for my $option (@option) {
-        if ($option =~ /^-h|--help$/) {
-            pod2usage;
-        } elsif ($option =~ /^-d|--debug$/) {
-            $self->{debug} = 1;
-        } elsif ($option =~ /^--default-mirror/) {
-            $option =~ s{/$}{};
-            $self->{default_mirror} = $option;
-        } else {
-            warn "Unexpected option $option\n";
-            pod2usage(1);
-        }
-    }
-    $self->{argv} = \@argv;
+    local @ARGV = @argv;
+    my $parser = Getopt::Long::Parser->new(
+        config => [ "no_auto_abbrev", "no_ignore_case", "pass_through" ],
+    );
+    $parser->getoptions(
+        "h|help" => sub { pod2usage },
+        "d|debug" => \$self->{debug},
+        "default-mirror=s" => \$self->{default_mirror},
+    ) or podusage(1);
+    $self->{argv} = \@ARGV;
     $self;
 }
 

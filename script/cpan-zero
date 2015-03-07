@@ -19,8 +19,9 @@ cpan-zero - cpanm or carton helper for dependencies on git repositories
     $ capn-zero carton install
 
     Options:
-    -h, --help   show this help
-    -d, --debug  turn on debug message
+    -h, --help            show this help
+    -d, --debug           turn on debug message
+        --default-mirror  default mirror. Default: http://www.cpan.org
 
 =head1 AUTHOR
 
